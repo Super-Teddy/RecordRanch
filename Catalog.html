@@ -1,0 +1,120 @@
+<DOCTYPE html>
+<html>
+<head>
+<title>Record Ranch - Where Vinyl Roams</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="keywords" content="Records, Albums, Record Albums, Recordings, Vinyl Records, LP's, LPs, Out-Of-Print, Vinyl Records, Record Album Dealer, Music, 33, Pop Instrumental, Psych, Psyche, Psychedelic Music, Jazz Music, Audiophile, Rock, Jazz, Country Music, Blues, Soul, Heavy Metal, Oldies, Psychedelic, Blues, British Invasion, Funky Soul, Rhythm And Blues, R&amp;B, Motown, Jazz, Black Music, Punk, Alternative, Indie, Modern Rock">
+<meta name="description" content="New/Sealed collectible vinyl records including Rock, Jazz, Soul, Psych, Funk, Punk, Modern Rock">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<link rel=stylesheet type="text/css" href="/css/NoPadding.css">
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<div id="QuickLists" style="position:absolute; text-align:center; width:113px; height:124px; z-index:2; left: 658px; top: 31px"> </div> 
+<div id="MainLayer" style="position:absolute; left:138px; top:173px; width:517px; height:331px; z-index:1"> 
+  <h4 style="text-align:center"><font face="Arial, Helvetica, sans-serif" color="#993300">Catalog</font></h4>
+
+  <div id="Error"></div>
+
+  <div id="Catalog Table Holder">
+  <table id="Catalog Table" border="0" cellpadding="0" cellspacing="0" name="Navigation" style="border-spacing: 10px 10px;">
+    <tbody>
+  </tbody></table>
+
+
+  <script>
+
+	fetch('/Test')
+	.then(function(response) {
+		return response.text();
+	}).then(function(data) {
+	try {
+  
+  var json = JSON.parse(data);
+
+  var table = document.getElementById("Catalog Table");
+  var row;
+  var i = 0;
+
+
+  function CreateEntry(name,artist,url,price,image, isSoundTrack = false, discount) {
+    i++;
+
+//	price = "$" + price;
+
+	if (!image) image = name + ".PNG"
+
+	if (i%3==1)
+	row = table.insertRow();
+
+	var underName;
+	if (!isSoundTrack)
+	  underName = "by " + artist;
+	else
+	  underName = "Sound Track";
+
+    var discountPrice = "";
+	if (discount != "None") {
+//	   discount = "$" + discount;
+	   discountPrice = price;
+	   price = discount
+	   price = "&nbsp;On Sale for&nbsp;" + price; 
+	}
+
+	var cell1 = row.insertCell();
+	cell1.innerHTML = '<p><div style="position:relative; text-align: center; color:white;"><a target="_blank" style="text-decoration: none ;" href="' + url + '"><img name="' + name +'" src="' + image + '" onload="" align="top" style="border-width:0px; border-color:white; border-style: solid;" width="120px" height="120px"><div style="font-size: 10px; font-weight: 1000;color: rgb(0, 0, 0); line-height: 17px;"><font face="Arial, Helvetica, sans-serif">' + name + '<br>' + underName + '<br><span style="text-decoration: line-through;">' + discountPrice + '</span>' + price + '</font></div> </a> </div> </p> ';
+	cell1.style = "height:170px; width:150px;";
+  }
+
+  for (record in json) {
+  	var name = "Missing Record";
+	var artist = "Unknown";
+	var image = "/MissingRecordImage.png";
+	var url = "";
+	var price = "?";
+	var discount = "None";
+	var isSoundTrack = false;
+
+	if (json[record].url) url = json[record].url;
+	if (json[record].name) name = json[record].name;
+	if (json[record].artist) artist = json[record].artist;
+	if (json[record].image) image = json[record].image;
+	if (json[record].price) price = json[record].price;
+	if (json[record].discount) discount = json[record].discount;
+
+	if (artist == "OST")
+	  isSoundTrack = true;
+
+	CreateEntry(name,artist, url,price, image, isSoundTrack, discount);
+
+  }
+      } catch (error) {
+     document.getElementById("Error").innerHTML = 'Record listings could not be shown at this time.<br>It could be your browser or some files on our server are corrupt or missing.<br><br> In the meantime you can view our listings on <a href="https://www.facebook.com/RecordRanchVA/">facebook</a>.';
+  }
+});
+  </script>
+
+
+
+  </div>
+  <div id="BottomMatter"> 
+<script>
+$(document).ready(function() {
+    $('#BottomMatter').load('Bottom.html');    
+});
+</script>
+</div>
+  </div>
+<div id="NavBar" style="position:absolute; width:106px; height:620px; z-index:1; left: 8px; top: 159px"> 
+<script>
+  $(document).ready(function() {
+    $('#NavBar').load('Buttons.html');    
+});
+</script>
+</div>
+<div id="ExtendoSidebar" style='height: 100%;'> 
+<script>
+    $('#ExtendoSidebar').load('ExtendOSidebar.html');    
+</script>
+</div>
+</body>
+</html>
